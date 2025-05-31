@@ -34,38 +34,24 @@
                  $search = $conn->prepare("SELECT * FROM `Users` WHERE `email` = ?");
                  $search->bind_param("s", $email);
                  $search->execute();
-                 $res = $search->get_result(); 
-                 $rowNum = mysqli_num_rows($res);
-                // echo var_dump($rowNum);
-                 if ($rowNum > 0) {
-                    $row = mysqli_fetch_assoc($res);
-                    if ($row['Password'] == $password){
-    
-                        
-                        $_SESSION['userId'] = $row['id'];
-                        $_SESSION['Role'] = $row['Role'];
-                        if ($row['Role'] == "user"){
-                            header('Location: userDash.php');
-                        }
-                        else {
-                            echo "hii";
-                            header('Location: admin/dashboard.php');
-                        }
-                        
-                    }
-                    else {
-                        echo "<div class='error-popup'>Invalid email or password.</div>";
-                        // header('Location: loginPage.php');
-                       
-                        
-                    }
-                    // $search->close();
-                    
-                 }
-                 else {
-                    header('Location: loginPage.php');
-                    echo "<div id='errorMsg'> Login Failed. </div>";
-                 }
+                 $search->bind_result($id, $name, $email, $dbPassword, $role);
+if ($search->fetch()) {
+    if ($dbPassword == $password) {
+        $_SESSION['userId'] = $id;
+        $_SESSION['Role'] = $role;
+        if ($role == "user") {
+            header('Location: userDash.php');
+        } else {
+            header('Location: admin/dashboard.php');
+        }
+        exit();
+    } else {
+        echo "<div class='error-popup'>Invalid email or password.</div>";
+    }
+} else {
+    echo "<div class='error-popup'>No user found.</div>";
+}
+
             }
     }
     ?>

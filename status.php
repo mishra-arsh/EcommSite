@@ -6,11 +6,10 @@
             $userId = $_SESSION['userId'];
             $role = $_SESSION['Role'];
             // echo 'hello';
-            $sql = $conn->prepare("SELECT * FROM `transaction` WHERE `user_id` = ?");
-            $sql->bind_param("i", $userId);
-            $sql->execute();
+            $sql = ("SELECT * FROM `transaction` WHERE `user_id` = '$userId'");
+           
 
-            $result = $sql->get_result();
+            $result = mysqli_query($conn, $sql);
         
 ?>
 
@@ -151,7 +150,7 @@
         <tbody>
             <?php
             
-                while($row = $result->fetch_assoc()){
+                while($row =  mysqli_fetch_assoc($result)){
     
             ?>
             <tr>

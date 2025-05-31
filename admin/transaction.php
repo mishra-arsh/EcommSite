@@ -10,9 +10,9 @@ if (!isset($_SESSION['userId']) || $_SESSION['Role'] !== 'admin') {
 // Handle deletion
 if (isset($_GET['id'])) {
     $deleteId = intval($_GET['id']);
-    $delete = $conn->prepare("DELETE FROM `transaction` WHERE `id` = ?");
-    $delete->bind_param("i", $deleteId);
-    $delete->execute();
+    $delete = ("DELETE FROM `transaction` WHERE `id` = '$deleteId'");
+    $delres = mysqli_query($conn, $delete);
+   
 
     // Prevent repeated deletion on refresh
     header("Location: transaction.php");
@@ -20,9 +20,9 @@ if (isset($_GET['id'])) {
 }
 
 // Fetch transaction data
-$sql = $conn->prepare('SELECT * FROM `transaction`');
-$sql->execute();
-$result = $sql->get_result();
+$sql = ('SELECT * FROM `transaction`');
+
+$result = mysqli_query($conn, $sql);
 ?>
 
 <!DOCTYPE html>
