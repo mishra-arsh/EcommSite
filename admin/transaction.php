@@ -9,18 +9,20 @@ if (!isset($_SESSION['userId']) || $_SESSION['Role'] !== 'admin') {
 
 if (isset($_GET['id'])) {
     $deleteId = intval($_GET['id']);
+
     $delete = $conn->prepare("DELETE FROM `transaction` WHERE `id` = ?");
     $delete->bind_param("i", $deleteId);
     $delete->execute();
+    $delete->close();
+
     header("Location: transaction.php");
     exit();
 }
 
-
-$sql = $conn->prepare('SELECT * FROM `transaction`');
-$sql->execute();
-$result = $sql->get_result();
+$sql = "SELECT * FROM `transaction`";
+$result = mysqli_query($conn, $sql);
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -174,11 +176,11 @@ $result = $sql->get_result();
                     href="transaction.php?id=<?php echo $row['id']; ?>" 
                     class="delete-btn" 
                     onclick="return confirm('Do you want to delete this transaction?');">
-                    DELETE
                 </a>
             </td>
         </tr>
-        <?php } ?>
+        <?php }
+         ?>
     </tbody>
 </table>
 
