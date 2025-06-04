@@ -51,7 +51,7 @@
 
     <div style="text-align:center; margin-top: 2rem;">
     <form action="" method="get" class="form-input">
-        <input type="text" name="search" placeholder="Search by Name, Category, or Coupon Code" value="<?php echo htmlspecialchars($search); ?>" style="padding: 0.5rem; width: 300px; border-radius: 5px; border: 1px solid #fff; background: linear-gradient(to right, #232526, #414345);
+        <input type="text" name="search" placeholder="Search by Name, Category, or Coupon Code" value="<?php echo htmlspecialchars($search); ?>" style="padding: 0.5rem; width: 300px; border-radius: 5px; border: 1px solid #fff; background: linear-gradient(to right, #232526, #414345; color: white;);
 ">
         <button type="submit" style="padding: 0.5rem 1rem; border: none; background-color:rgb(139, 52, 52); color: white; border-radius: 5px;">Search</button>
         
@@ -66,6 +66,19 @@
     <h1>Welcome to sHOPI sTORE</h1>
     <p>Your one-stop destination for top-quality products at unbeatable prices. From daily essentials to exclusive deals, explore our wide range and enjoy seamless shopping. Fast delivery, secure checkout, and amazing offers await you!</p>
     </section>
+
+    <div class="category-section" style="text-align:center; margin: 2rem auto;">
+    <h2 style="color: white;">Browse by Category</h2>
+    <div id="categoryButtons" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin-top: 1rem;">
+        <button class="category-btn" data-category="Electronics">Electronics</button>
+        <button class="category-btn" data-category="Fashion">Fashion</button>
+        <button class="category-btn" data-category="Games & Toys">Games & Toys</button>
+        <!-- <button class="category-btn" data-category="Home">Home</button> -->
+        <button class="category-btn" data-category="Kitchen & Foods">Kitchen</button>
+        <button class="category-btn" data-category="All">Show All</button>
+    </div>
+    </div>
+
 
     <div id="cartModal" class="modal">
     <div class="modal-content">
@@ -83,6 +96,10 @@
         <span class="close-checkout-btn">&times;</span>
         <h2>Checkout Form</h2>
         <form id="checkoutForm">
+
+            <label for="coupon">Coupon Code:</label><br>
+            <input type="text" id="coupon" name="coupon"><br><br>
+
             <label for="fullName">Full Name:</label><br>
             <input type="text" id="fullName" name="fullName" required><br><br>
 
@@ -91,6 +108,10 @@
 
             <label for="contact">Contact Number:</label><br>
             <input type="text" id="contact" name="contact" required><br><br>
+
+            <p><strong>Total: Rs <span id="totalPrice">0</span></strong></p>
+            <p id="discountMessage" style="color:green;"></p>
+
 
             <button type="submit" class="cart-btn">Submit Order</button>
         </form>
@@ -128,20 +149,23 @@
     while ($row = mysqli_fetch_assoc($result)) {
     ?>
         <div class="prod-card">
+        
+            <div class="favorite-icon"><i class="fas fa-heart"></i></div>
             <img src="images/<?php echo htmlspecialchars($row['image']); ?>" alt="Product Image">
+
             <h2><?php echo htmlspecialchars($row['name']); ?></h2>
             <h3><?php echo htmlspecialchars($row['category']); ?></h3>
             <p>Rs <?php echo htmlspecialchars($row['price']); ?></p>
             <p>Quantity: <?php echo htmlspecialchars($row['quantity']); ?></p>
             <a href='#'
                 class="add-to-cart-btn" 
-                data-image="images/<?php echo htmlspecialchars($row['image']); ?>"
+                data-image="images/<?php echo $row['image']; ?>"
                 data-name="<?php echo htmlspecialchars($row['name']); ?>" 
                 data-category="<?php echo htmlspecialchars($row['category']); ?>" 
                 data-price="<?php echo htmlspecialchars($row['price']); ?>">
                 <button class="cart-btn" type="button">ADD TO CART</button>
             </a>
-            <a href="borrow.php?prodNo=<?php echo "{$row['prodNo']}";?>"><button class="cart-btn">BUY NOW</button></a>
+            <a href="borrow.php?prodNo=<?php echo $row['prodNo'];?>"><button class='cart-btn'>BUY NOW</button></a>
 
         </div>
         
@@ -185,36 +209,37 @@
         updateCartCount();
     });
 
-    // --- Show Modal ---
+    
     cartIcon.addEventListener("click", function(event) {
         event.preventDefault();
         modal.style.display = "block";
     });
 
-    // --- Close Modal ---
+    
     closeBtn.addEventListener("click", () => modal.style.display = "none");
     window.addEventListener("click", (event) => {
         if (event.target === modal) modal.style.display = "none";
     });
 
-    // --- Add to Cart Event Listener ---
+   
     document.querySelectorAll(".add-to-cart-btn").forEach(button => {
         button.addEventListener("click", function(event) {
             event.preventDefault();
             const item = {
                 name: this.getAttribute("data-name"),
                 category: this.getAttribute("data-category"),
-                price: this.getAttribute("data-price")
+                price: this.getAttribute("data-price"),
+                image: this.getAttribute("data-image")
             };
             addItemToCart(item, true);
         });
     });
 
-    // --- Add Item to Modal Cart + LocalStorage ---
+    
     function addItemToCart(item, saveToStorage = true) {
     const itemId = `${item.name}-${item.category}-${item.price}`;
 
-    // Prevent duplicate items
+  
     if (document.getElementById(itemId)) return;
 
     const cartItem = document.createElement("div");
@@ -240,7 +265,7 @@
     updateCartCount();
 }
 
-// Updated cart button logic
+
 document.querySelectorAll(".add-to-cart-btn").forEach(button => {
     button.addEventListener("click", function(event) {
         event.preventDefault();
@@ -255,7 +280,7 @@ document.querySelectorAll(".add-to-cart-btn").forEach(button => {
 });
 
 
-    // --- Delete Item from Modal and localStorage ---
+    
     cartItemsContainer.addEventListener("click", function(e) {
         if (e.target.classList.contains("delete-btn")) {
             const itemId = e.target.getAttribute("data-id");
@@ -269,7 +294,7 @@ document.querySelectorAll(".add-to-cart-btn").forEach(button => {
         }
     });
 
-    // --- Show 'empty' message if cart is empty ---
+    
     function updateEmptyCartMessage() {
         if (!cartItemsContainer.hasChildNodes()) {
             cartItemsContainer.innerHTML = "<p>Your cart is currently empty.</p>";
@@ -278,6 +303,7 @@ document.querySelectorAll(".add-to-cart-btn").forEach(button => {
 
 
     const filterModal = document.getElementById("filterModal");
+
 const openFilterBtn = document.getElementById("openFilterModal");
 const closeFilterBtn = document.querySelector(".close-filter-btn");
 
@@ -318,6 +344,7 @@ document.getElementById("filterForm").addEventListener("submit", function (e) {
             card.style.display = "none";
         }
     });
+    document.getElementById("filterForm").reset();
 
     filterModal.style.display = "none";
 });
@@ -361,9 +388,65 @@ window.addEventListener("click", (e) => {
     if (e.target === checkoutModal) checkoutModal.style.display = "none";
 });
 
+const totalPriceEl = document.getElementById("totalPrice");
+const couponInput = document.getElementById("coupon");
+const discountMessage = document.getElementById("discountMessage");
+
+function calculateCartTotal() {
+    const cart = JSON.parse(localStorage.getItem("cartItems")) || [];
+    let total = 0;
+
+    cart.forEach(item => {
+        total += parseFloat(item.price);
+    });
+
+    return total;
+}
+
+function updateTotalDisplay(discount = 0) {
+    let total = calculateCartTotal();
+    if (discount > 0) {
+        total -= (total * discount / 100);
+        discountMessage.textContent = `Coupon applied! ${discount}% discount.`;
+    } else {
+        discountMessage.textContent = "";
+    }
+
+    totalPriceEl.textContent = total.toFixed(2);
+}
+
+checkoutBtn.addEventListener("click", () => {
+    updateTotalDisplay(); 
+    checkoutModal.style.display = "block";
+});
+
+
 document.getElementById("checkoutForm").addEventListener("submit", function(e) {
     e.preventDefault();
-    alert("Order submitted! (This is a placeholder. You can now handle the data.)");
+
+    const coupon = couponInput.value.trim().toUpperCase();
+    let discount = 0;
+
+    if (coupon === "SAVE10") {
+        discount = 10;
+    } else if (coupon === "WELCOME20") {
+        discount = 20;
+
+    } else if (coupon === "SALE15") {
+        discount = 15;
+    }
+    else if (coupon !== "") {
+        alert("Invalid coupon code!");
+        return;
+    }
+
+    const totalBefore = calculateCartTotal();
+    const finalTotal = totalBefore - (totalBefore * discount / 100);
+
+    alert(`Order submitted! Final amount: Rs ${finalTotal.toFixed(2)}.`)
+    // alert("Order submitted! (This is a placeholder. You can now handle the data.)");
+
+
     // Optional: Clear cart
     localStorage.removeItem("cartItems");
     cartItemsContainer.innerHTML = "";
@@ -372,6 +455,27 @@ document.getElementById("checkoutForm").addEventListener("submit", function(e) {
     modal.style.display = "none";
 });
 
+document.querySelectorAll(".category-btn").forEach(btn => {
+    btn.addEventListener("click", function () {
+        const selectedCategory = this.getAttribute("data-category").toLowerCase().trim();
+
+        document.querySelectorAll(".prod-card").forEach(card => {
+            const cardCategory = card.querySelector("h3").textContent.toLowerCase().trim();
+
+            if (selectedCategory === "all" || cardCategory === selectedCategory) {
+                card.style.display = "block";
+            } else {
+                card.style.display = "none";
+            }
+        });
+    });
+});
+
+document.querySelectorAll('.favorite-icon').forEach(icon => {
+    icon.addEventListener('click', function () {
+        this.classList.toggle('active');
+    });
+});
 
 
 </script>

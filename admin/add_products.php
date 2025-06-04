@@ -243,6 +243,7 @@
   <div class="logo">sHOPI sTORE</div>
   <ul class="nav-links" id="navLinks">
   <li><a href="../index.php">HOME</a></li>
+  <li><a href="dashboard.php">DASHBOARD</a></li>
         <li><a href="view_products.php">VIEW PRODUCTS</a></li>
         <li><a href="add_products.php">ADD PRODUCTS</a></li>
         <li><a href="users.php">TOTAL CUSTOMERS</a></li>
@@ -297,7 +298,6 @@
                 }
             });
 
-            // Pop-up for submit-prod class
             const submitProd = document.querySelector('.submit-prod');
             if (submitProd) {
                 setTimeout(() => {

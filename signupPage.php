@@ -28,7 +28,7 @@
             <input type="password" name="cpassword" class="form-input" id="cpassword">
             <select name="Role" id="role">
                 <option value="admin">Admin</option>
-                <option value="user">Student</option>
+                <option value="user">Customer</option>
             </select>
            
             <!-- <select name="year-select" id="clg-year">
@@ -111,11 +111,6 @@ function showError(message) {
         errorDiv.remove();
     }, 4000);
 }
-
 </script>
-
-
-
-
 </body>
 </html>

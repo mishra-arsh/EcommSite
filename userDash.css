@@ -227,7 +227,7 @@ body {
     }
 }
 
-/* Modal container (hidden by default) */
+
 .modal {
   display: none;
   position: fixed;
@@ -237,10 +237,10 @@ body {
   width: 100%;
   height: 100%;
   overflow: auto;
-  background-color: rgba(0,0,0,0.6); /* Dark background */
+  background-color: rgba(0,0,0,0.6); 
 }
 
-/* Modal content */
+
 .modal-content {
   background: linear-gradient(to right,rgb(54, 54, 54), rgb(193, 0, 0));
   color: white;
@@ -253,7 +253,7 @@ body {
   position: relative;
 }
 
-/* Close button */
+
 .close-btn {
   color: #aaa;
   float: right;
@@ -284,4 +284,110 @@ body {
 
 .delete-btn:hover {
   background-color: #c0392b;
+}
+
+.category-btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #8b3434;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.category-btn:hover {
+  background-color: #6f2b2b;
+}
+
+.prod-card {
+  position: relative;
+}
+
+.favorite-icon {
+  position: absolute;
+  top: 3%;
+  right: 7%;
+  color: #5a5959;
+  font-size: 20px;
+  cursor: pointer;
+  z-index: 1;
+  transition: color 0.3s ease;
+}
+
+.favorite-icon.active {
+  color: red;
+}
+
+@media (min-width: 1200px) {
+  .prod-card {
+      flex: 1 1 calc(20% - 2rem);
+  }
+
+  .modal-content {
+      width: 40%;
+  }
+}
+
+
+@media (min-width: 768px) and (max-width: 1199px) {
+  .prod-card {
+      flex: 1 1 calc(33.33% - 2rem);
+  }
+
+  .modal-content {
+      width: 60%;
+  }
+}
+
+
+@media (max-width: 767px) {
+  .navbar {
+      flex-direction: column;
+      align-items: flex-start;
+  }
+
+  .nav-links {
+      width: 100%;
+      flex-direction: column;
+      align-items: center;
+  }
+
+  .prod-card {
+      flex: 1 1 90%;
+      max-width: 100%;
+  }
+
+  .modal-content {
+      width: 90%;
+  }
+
+  .intro-section {
+      padding: 1rem;
+  }
+}
+
+
+@media (max-width: 400px) {
+  .logo {
+      font-size: 1.2rem;
+  }
+
+  .hamburger {
+      font-size: 1.5rem;
+  }
+
+  .prod-card h2 {
+      font-size: 1rem;
+  }
+
+  .prod-card p {
+      font-size: 0.9rem;
+  }
+
+  .category-btn,
+  .cart-btn {
+      font-size: 0.9rem;
+      padding: 0.4rem 0.8rem;
+  }
 }

@@ -7,19 +7,16 @@ if (!isset($_SESSION['userId']) || $_SESSION['Role'] !== 'admin') {
     exit();
 }
 
-// Handle deletion
 if (isset($_GET['id'])) {
     $deleteId = intval($_GET['id']);
     $delete = $conn->prepare("DELETE FROM `transaction` WHERE `id` = ?");
     $delete->bind_param("i", $deleteId);
     $delete->execute();
-
-    // Prevent repeated deletion on refresh
     header("Location: transaction.php");
     exit();
 }
 
-// Fetch transaction data
+
 $sql = $conn->prepare('SELECT * FROM `transaction`');
 $sql->execute();
 $result = $sql->get_result();
@@ -34,9 +31,8 @@ $result = $sql->get_result();
     <style>
         body {
             /* margin: 0; */
-            font-family: Arial, sans-serif;
+            /* font-family: Arial, sans-serif; */
         }
-
         .navbar {
             position: fixed;
             top: 0;
@@ -102,7 +98,6 @@ $result = $sql->get_result();
                     display: block;
                 }
         }
-
         .table-data {
             width: 90%;
             margin: 100px auto 50px;
@@ -147,6 +142,7 @@ $result = $sql->get_result();
     <div class="logo">sHOPI sTORE</div>
     <ul class="nav-links" id="navLinks">
     <li><a href="../index.php">HOME</a></li>
+    <li><a href="dashboard.php">DASHBOARD</a></li>
         <li><a href="view_products.php">VIEW PRODUCTS</a></li>
         <li><a href="add_products.php">ADD PRODUCTS</a></li>
         <li><a href="users.php">TOTAL CUSTOMERS</a></li>
@@ -187,7 +183,6 @@ $result = $sql->get_result();
 </table>
 
 <script>
-    // Mobile toggle for nav
     const hamburger = document.getElementById('hamburger');
     const navLinks = document.getElementById('navLinks');
 
